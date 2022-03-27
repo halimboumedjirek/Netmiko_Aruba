@@ -9,3 +9,4 @@ Lines 25 and 26 will use ConnectHandler within Netmiko to SSH into the device an
 
 Lines 28 and 29 will create a file using the file name specified on line 14 and will output the file to the current working directory. 
 
+Edit: getpass is a module that will obfuscate the password when it's typed in. 
