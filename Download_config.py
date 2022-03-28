@@ -1,30 +1,26 @@
 from netmiko import ConnectHandler
 import getpass
 
-#get/store device IP from user
-address=input("Enter the IP address of the device: ")
-straddress = str(address)
-#get/store username from user
-username=input("Enter your username: ")
-stusername= str(username)
-#get/store password from user
-password=getpass.getpass("Enter your password: ")
-stpassword= str(password)
-#create file name
-filename=input("What would you like to name the output file? ")
-stfilename = str(filename)
+#get username from user
+username=input("Enter SSH username: ")
+#get password from user
+password=getpass.getpass("Enter SSH password: ")
 
-#create dictionary
-arubav_1 = {
-    'device_type': 'aruba_os',
-    'ip': straddress,
-    'username': stusername , 
-    'password': stpassword ,
-}
-#Connect to device and send command
-net_connect = ConnectHandler(**arubav_1)
-output = net_connect.send_command('show run')
+#open file to populate IP
+with open('myswitches.txt') as switches:
+    for IP in switches:
+        arubav_1 = {
+            'device_type': 'aruba_os',
+            'ip': IP,
+            'username': username , 
+            'password': password ,
+        }
+        print('Connecting to ' + IP)
+        print('-'*65)
 
-#Copy output into a file
-with open(filename, 'w') as f:
-    print (output, file=f)
+        for devices in arubav_1:
+            net_connect = ConnectHandler(**arubav_1)
+            output = net_connect.send_command('show run')
+            with open('backup_' + IP, 'w') as f:
+                print (output, file=f)
+        
